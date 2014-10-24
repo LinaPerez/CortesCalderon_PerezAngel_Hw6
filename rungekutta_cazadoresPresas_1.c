@@ -1,6 +1,8 @@
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
+#define USAGE "./a.out Xo Yo"
+
 
 float func_primex(float x, float y);
 float func_primey(float x, float y);
@@ -19,14 +21,26 @@ Inicializar punteros que representan las listas para las funciones y, x &  t
   float* y;
   float* t;
   FILE* datos;
-
-  float Xo = 20.0;
-  float Yo = 30.0;
+  char filename[25];
+  float Xo;
+  float Yo;
   float To = min_t;
+
+/*revisa el numero de argumentos que entra en al consola */ 
+  if(argc!=3){
+    printf("USAGE: %s\n", USAGE);
+    exit(1);
+  }
+
+
 /*Dimensiones de los punteros */
   x = malloc(n_points*sizeof(float));
   y = malloc(n_points*sizeof(float));
   t = malloc(n_points*sizeof(float));
+
+  Xo = atof(argv[1]); 
+  Yo = atof(argv[2]);
+
 /*llenando los punteros de 0.0s */
   for (i=0;i<n_points;i++){
     x[i]=0.0;
@@ -104,11 +118,15 @@ Inicializar punteros que representan las listas para las funciones y, x &  t
     x[i] = x[i-1] + h * average_kx;
 }
   
-  datos = fopen("poblaciones.dat","w");
+  sprintf(filename, "poblaciones_%f_%f.dat", Xo, Yo);
+  datos = fopen(filename, "w");
+
+ 
+
   for(i=0;i<n_points;i++){
     fprintf(datos, "%f %f %f \n", t[i], x[i], y[i]);
 }
-  
+ 
   return 0;
 }
 
