@@ -13,6 +13,11 @@ datos = np.loadtxt(nombredatos)
 x = datos[:,1]
 y = datos[:,2]
 
+l=list(nombredatos)
+n=len(l)
+l[n-4:n]=[]
+nombredatos="".join(l)
+
 #Graficar
 pylab.plot(x,y)
 pylab.xlabel('X')
