@@ -2,7 +2,9 @@
 #include<math.h>
 #include<stdlib.h>
 
-float func_prime_velocity(float masa, float c, float energia_cinetica);
+float func_prime_vx(float , float , float );
+float func_prime_vy(float , float , float );
+float func_prime_vz(float , float , float );
 
 
 int main (int argc, char **argv){
@@ -20,6 +22,9 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
   float* y;
   float* z; 
   float* t;
+  float* vx;
+  float* vy;
+  float* vz;
   FILE* data;
   float pitch;
   float energia_cinetica; 
@@ -39,6 +44,9 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
   x = malloc(n_points*sizeof(float));
   y = malloc(n_points*sizeof(float));
   z = malloc(n_points*sizeof(float));
+  vx = malloc(n_points*sizeof(float));
+  vy = malloc(n_points*sizeof(float));
+  vz = malloc(n_points*sizeof(float));
   t = malloc(n_points*sizeof(float));
 
   energia_cinetica = atof(argv[1]); 
