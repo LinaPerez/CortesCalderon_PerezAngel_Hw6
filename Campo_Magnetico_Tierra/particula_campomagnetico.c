@@ -16,7 +16,7 @@ int main (int argc, char **argv){
   float max_t = 100.0;
   float n_points = ((max_t - min_t) / h);
 /*
-Inicializar punteros que representan las listas para las funciones y, x, z &  t
+Inicializar punteros que representan las listas para las funciones y, x, z, vx, vy, vz &  t
  */
   float* x;
   float* y;
@@ -49,8 +49,10 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
   vz = malloc(n_points*sizeof(float));
   t = malloc(n_points*sizeof(float));
 
+/*Entradas por consola */
   energia_cinetica = atof(argv[1]); 
   pitch = atof(argv[2]);
+  pitch_rad = (pitch*math.pi)/180;
   
 /*llenando los punteros de 0.0s */
   for (i=0;i<n_points;i++){
@@ -58,8 +60,13 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
     y[i]=0.0;
     z[i]=0.0;
     t[i]=0.0;
+    vx[i]=0.0;
+    vy[i]=0.0;
+    vz[i]=0.0;
     if(i==0){
       x[i] = 2*Radio;
+      vy[i] = v*math.cos(pitch_rad);
+      vz[i] = v*math.sin(pitch_rad);
     }
   }
   
@@ -67,20 +74,9 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
   float ff;
   ff = energia_cinetica + (masa*pow(c,2));
   v = c * (sqrt(((pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))-1));
-  float vx_o = 0.0;
-  float vy_o = v*math.cos(pitch);
-  float vz_o = v*math.sin(pitch);
   float lambda = 1/(sqrt(1-((pow(v,2))/(pow(c,2)))));
 
-     /* definiendo las variables apra rungekutta*/
-
- 
-  float t3;
-
-/*Empezando RungeKutta4*/
-
-  for (i=1;i<n_points;i++){
- /* guardar archivo
+  /* guardar archivo
 }
   char n[150];
   sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica,pitch);
