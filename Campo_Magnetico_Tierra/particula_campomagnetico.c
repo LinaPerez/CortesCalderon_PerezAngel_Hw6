@@ -54,70 +54,25 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
       x[i] = 2*Radio;
     }
   }
-  /* HASTA AQUI LLEGAMOOOOOOOOOSSSSSSSS!!!!!!!!
+  
+  float v; 
+  float ff;
+  ff = energia_cinetica + (masa*pow(c,2));
+  v = c * (sqrt(((pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))-1));
+  float vx_o = 0.0;
+  float vy_o = v*math.cos(pitch);
+  float vz_o = v*math.sin(pitch);
+  float lambda = 1/(sqrt(1-((pow(v,2))/(pow(c,2)))));
+
      /* definiendo las variables apra rungekutta*/
 
-  float k1x;
-  float k1y;
-  float k2x;
-  float k2y;
-  float k3x;
-  float k3y;
-  float k4x;
-  float k4y;
-  float average_kx;
-  float average_ky;
-  float y1;
-  float y2;
-  float y3;
-  float x1;
-  float x2;
-  float x3;
-  float t1;
-  float t2;
+ 
   float t3;
 
 /*Empezando RungeKutta4*/
 
   for (i=1;i<n_points;i++){
-    
-    k1x = func_primex(x[i-1],y[i-1]);
-    k1y = func_primey(x[i-1],y[i-1]);
-    
-  
-
-/*Primer paso */
-
-    t1 = t[i-1] + (h/2.0);
-    y1 = y[i-1] + (h/2.0) * k1y;
-    x1 = x[i-1] + (h/2.0) * k1x;
-    k2x = func_primex(x1, y1);
-    k2y= func_primey(x1, y1);
-    
-/*Segundo paso */
-
-    t2 = t[i-1] + (h/2.0);
-    y2 = y[i-1] + (h/2.0) * k2y;
-    x2 = x[i-1] + (h/2.0) * k2x;  
-    k3x = func_primex(x2, y2);
-    k3y = func_primey(x2, y2);
-        
-/*Tercer paso */
-
-    t3 = t[i-1] + h;
-    y3 = y[i-1] + h * k3y;
-    x3 = x[i-1] + h * k3x;
-    k4x = func_primex(x3, y3);
-    k4y = func_primey(x3, y3);
-    
-/*Cuarto paso */
-
-    average_kx = (1.0/6.0)*(k1x + 2.0*k2x + 2.0*k3x + k4x);
-    average_ky = (1.0/6.0)*(k1y + 2.0*k2y + 2.0*k3y + k4y);
-    
-    t[i] = t[i-1] + h;
-    y[i] = y[i-1] + h * average_ky;
-    x[i] = x[i-1] + h * average_kx;
+ /* guardar archivo
 }
   char n[150];
   sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica,pitch);
@@ -126,14 +81,19 @@ Inicializar punteros que representan las listas para las funciones y, x, z &  t
   for(i=0;i<n_points;i++){
     fprintf(data, "%f %f %f %f \n", t[i], x[i], y[i], z[i]);
 }
- 
+ */
   return 0;
 }
 
-float func_prime_velocity(float masa, float c, float energia_cinetica){
-  float v; 
-  float ff;
-  ff = energia_cinetica + (masa*pow(c,2));
-  v = c * (sqrt(((pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))-1));
-  return v;
+float func_prime_vx(float , float , float ){
+ 
+  return ;
+}
+float func_prime_vy(float masa, float c, float energia_cinetica){
+ 
+  return ;
+}
+float func_prime_vz(float masa, float c, float energia_cinetica){
+ 
+  return ;
 }
