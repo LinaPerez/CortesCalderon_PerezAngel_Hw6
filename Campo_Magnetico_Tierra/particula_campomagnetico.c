@@ -2,29 +2,24 @@
 #include<math.h>
 #include<stdlib.h>
 
-float func_prime_vx(float , float , float );
-float func_prime_vy(float , float , float );
-float func_prime_vz(float , float , float );
-
+void campo_dipolo (float* b, float* r);
+void aceleracion (float* a, float* v, float* b);
 
 int main (int argc, char **argv){
   int i;
   int j;
   
-  float h = 0.01;
+  float h = 0.000001;
   float min_t = 0.0;
   float max_t = 100.0;
   float n_points = ((max_t - min_t) / h);
 /*
 Inicializar punteros que representan las listas para las funciones y, x, z, vx, vy, vz &  t
  */
-  float* x;
-  float* y;
-  float* z; 
-  float* t;
-  float* vx;
-  float* vy;
-  float* vz;
+  float* b;
+  float* a;
+  float* v; 
+  float* r;
   FILE* data;
   float pitch;
   float energia_cinetica; 
@@ -32,7 +27,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   float masa = 0.00000000000000000000000000167; //kg masa del proton en reposo // 
   float Radio = 6378100; //metros del radio de la Tierra//
   float To = min_t;
-
+  float Bo = 0.00003; // Teslas del campo magnetico en el ecuador //
 /*revisa el numero de argumentos que entra en al consola */ 
   if(argc!=3){
     printf("debe introducir los parámetros de energía cinética y el ángulo pitch");
@@ -41,40 +36,74 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 
 
 /*Dimensiones de los punteros */
-  x = malloc(n_points*sizeof(float));
-  y = malloc(n_points*sizeof(float));
-  z = malloc(n_points*sizeof(float));
-  vx = malloc(n_points*sizeof(float));
-  vy = malloc(n_points*sizeof(float));
-  vz = malloc(n_points*sizeof(float));
-  t = malloc(n_points*sizeof(float));
+  r = malloc(3*sizeof(float));
+  b = malloc(3*sizeof(float));
+  a = malloc(3*sizeof(float));
+  v = malloc(3*sizeof(float));
+ 
 
 /*Entradas por consola */
   energia_cinetica = atof(argv[1]); 
   pitch = atof(argv[2]);
-  pitch_rad = (pitch*math.pi)/180;
-  
-/*llenando los punteros de 0.0s */
-  for (i=0;i<n_points;i++){
-    x[i]=0.0;
-    y[i]=0.0;
-    z[i]=0.0;
-    t[i]=0.0;
-    vx[i]=0.0;
-    vy[i]=0.0;
-    vz[i]=0.0;
-    if(i==0){
-      x[i] = 2*Radio;
-      vy[i] = v*math.cos(pitch_rad);
-      vz[i] = v*math.sin(pitch_rad);
-    }
-  }
-  
-  float v; 
+  pitch_rad = (pitch*math.pi)/180.0;
+
+  /*valor inicial de la velocidad a partir de energia cinetica */
+  float v_o; 
   float ff;
   ff = energia_cinetica + (masa*pow(c,2));
-  v = c * (sqrt(((pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))-1));
-  float lambda = 1/(sqrt(1-((pow(v,2))/(pow(c,2)))));
+  v_o = c * (sqrt(((pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))-1));
+  float lambda = 1/(sqrt(1-((pow(v_o,2))/(pow(c,2)))));
+  
+  /*valores iniciales para r y v */
+  for (i=0;i<3;i++){
+    
+    if(i==0){
+      r[i] = 2*Radio;
+      v[i] = 0.0;
+      
+    }
+    if(i==1){
+      r[i] = 0.0;
+      v[i] = v_o*math.sin(pitch_rad);
+      
+    }
+    if(i==2){
+      r[i] = 0.0;
+      v[i] = v_o*math.cos(pitch_rad);
+      
+    }
+    
+  }
+  
+  /* RungeKutta 4 orden */
+
+  for(i=0; i<3; i++){
+
+    campo_dipolo (float* b, float* r);
+    aceleracion (float* a, float* v, float* b);
+
+    v[i] = v[i] + (h/2.0) * a[i];
+    r[i] = r[i] + (h/2.0) * v[i];
+    campo_dipolo (float* b, float* r);
+    aceleracion (float* a, float* v, float* b);
+
+
+    v[i] = v[i] + (h/2.0) * a[i];
+    r[i] = r[i] + (h/2.0) * v[i];
+    campo_dipolo (float* b, float* r);
+    aceleracion (float* a, float* v, float* b);
+
+    v[i] = v[i] + (h/2.0) * a[i];
+    r[i] = r[i] + (h/2.0) * v[i];
+    campo_dipolo (float* b, float* r);
+    aceleracion (float* a, float* v, float* b);
+
+
+
+  }
+
+
+
 
   /* guardar archivo
 }
@@ -89,15 +118,17 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   return 0;
 }
 
-float func_prime_vx(float , float , float ){
- 
-  return ;
+void campo_dipolo (float* b, float* r){
+  float R = sqrt(pow(r[0], 2)+pow(r[1], 2) + pow(r[2], 2)); 
+
+  b[0]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[0]*r[2])); 
+  b[1]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[1]*r[2]));
+  b[2]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (2*pow(r[2],2) - pow(r[0], 2) - pow(r[1], 2)));
+
 }
-float func_prime_vy(float masa, float c, float energia_cinetica){
+void aceleracion (float* a, float* v, float* b){
+  a[0] = (b[2]*v[1]) - (v[2]*b[1]);
+  a[1] = (b[2]*v[0]) - (v[2]*b[0]);
+  a[2] = (b[1]*v[0]) - (v[1]*b[0]);
  
-  return ;
-}
-float func_prime_vz(float masa, float c, float energia_cinetica){
- 
-  return ;
 }
