@@ -8,6 +8,7 @@ void aceleracion (float* a, float* v, float* b);
 int main (int argc, char **argv){
   int i;
   int j;
+  float pi = 3.1416;
   
   float h = 0.000001;
   float min_t = 0.0;
@@ -45,7 +46,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 /*Entradas por consola */
   energia_cinetica = atof(argv[1]); 
   pitch = atof(argv[2]);
-  pitch_rad = (pitch*math.pi)/180.0;
+ float  pitch_rad = (pitch*pi)/180.0;
 
   /*valor inicial de la velocidad a partir de energia cinetica */
   float v_o; 
@@ -64,12 +65,12 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     }
     if(i==1){
       r[i] = 0.0;
-      v[i] = v_o*math.sin(pitch_rad);
+      v[i] = v_o*sin(pitch_rad);
       
     }
     if(i==2){
       r[i] = 0.0;
-      v[i] = v_o*math.cos(pitch_rad);
+      v[i] = v_o*cos(pitch_rad);
       
     }
     
@@ -79,24 +80,35 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 
   for(i=0; i<3; i++){
 
-    campo_dipolo (float* b, float* r);
-    aceleracion (float* a, float* v, float* b);
+    /* usar constantes ?
+    float a1;
+    float a2;
+    float a3;
+    float a4;
+    float v1;
+    float v2;
+    float v3;
+    float v4;
+    */
+   
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
 
     v[i] = v[i] + (h/2.0) * a[i];
     r[i] = r[i] + (h/2.0) * v[i];
-    campo_dipolo (float* b, float* r);
-    aceleracion (float* a, float* v, float* b);
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
 
 
     v[i] = v[i] + (h/2.0) * a[i];
     r[i] = r[i] + (h/2.0) * v[i];
-    campo_dipolo (float* b, float* r);
-    aceleracion (float* a, float* v, float* b);
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
 
     v[i] = v[i] + (h/2.0) * a[i];
     r[i] = r[i] + (h/2.0) * v[i];
-    campo_dipolo (float* b, float* r);
-    aceleracion (float* a, float* v, float* b);
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
 
 
 
@@ -120,7 +132,8 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 
 void campo_dipolo (float* b, float* r){
   float R = sqrt(pow(r[0], 2)+pow(r[1], 2) + pow(r[2], 2)); 
-
+  float Radio = 6378100;
+  float Bo = 0.00003;
   b[0]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[0]*r[2])); 
   b[1]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[1]*r[2]));
   b[2]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (2*pow(r[2],2) - pow(r[0], 2) - pow(r[1], 2)));
