@@ -78,9 +78,11 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   
   /* RungeKutta 4 orden */
 
-  for(i=0; i<3; i++){
+ for(j=0; j<n_points;j++){
+ for(i=0; i<3; i++){
 
-    /* usar constantes ?
+   /* falta el if para el print y hacer un arreglo para el tiempo */
+    
     float a1;
     float a2;
     float a3;
@@ -89,30 +91,58 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     float v2;
     float v3;
     float v4;
-    */
+    float r1;
+    float r2;
+    float r3;
+    float r4;
+   
    
     campo_dipolo (b, r);
     aceleracion (a, v, b);
+    
+    a1= a[i];
 
-    v[i] = v[i] + (h/2.0) * a[i];
-    r[i] = r[i] + (h/2.0) * v[i];
+    v1 = v[i] + (h/2.0) * a1;
+    r1 = r[i] + (h/2.0) * v1;
+    v[i] = v1;
+    r[i] = r1;
+
+
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
+    
+    a2= a[i];
+    
+
+    v2 = v[i] + (h/2.0) * a2;
+    r2 = r[i] + (h/2.0) * v2;
+    v[i] = v2;
+    r[i] = r2;
+
+
     campo_dipolo (b, r);
     aceleracion (a, v, b);
 
+    a3= a[i];
 
-    v[i] = v[i] + (h/2.0) * a[i];
-    r[i] = r[i] + (h/2.0) * v[i];
+    v3 = v[i] + (h/2.0) * a3;
+    r3 = r[i] + (h/2.0) * v3;
+
+    v[i] = v3;
+    r[i] = r3;
+
     campo_dipolo (b, r);
     aceleracion (a, v, b);
 
-    v[i] = v[i] + (h/2.0) * a[i];
-    r[i] = r[i] + (h/2.0) * v[i];
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
+    a4= a[i];
+   
+    float average_v = (1.0/6.0)*(a1+(2.0*a2)+(2.0*a3)+a4);
+    float average_r = (1.0/6.0)*(v1+(2.0*v2)+(2.0*v3)+v4);
 
-
-
+    v[i] = v3 + h*average_v;
+    r[i] = r3 + h*average_r;
   }
+ }
 
 
 
