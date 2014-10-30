@@ -57,6 +57,8 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   ff = energia_cinetica + (masa*pow(c,2));
   v_o = c * (sqrt(((-pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))+1));
 
+  
+
   float lambda = 1/(sqrt(1-((pow(v_o,2))/(pow(c,2)))));
   
   /*valores iniciales para r y v */
@@ -86,79 +88,139 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   
   /* RungeKutta 4 orden */
   float t1 = min_t;
-  for(j=0; j<4;j++){
-    t1 = t[j]+ h;
-    for(i=0; i<3; i++){
-      
-      
-      float a1;
-      float a2;
-      float a3;
-      float a4;
-      float v1;
-      float v2;
-      float v3;
-      float v4;
-      float r1;
-      float r2;
-      float r3;
-      float r4;
-      
-      
-      
-   
-      campo_dipolo (b, r);
-      aceleracion (a, v, b);
-      
-      a1= a[i];
-      
-      v1 = v[i] + (h/2.0) * a1;
-      r1 = r[i] + (h/2.0) * v1;
-      v[i] = v1;
-      r[i] = r1;
-
-      printf("%f %f \n", v[i], r[i]);
-      
+  for(j=1; j<305;j++){
+    t1 = t[j-1]+ h;
     
-      campo_dipolo (b, r);
-      aceleracion (a, v, b);
-      
-      a2= a[i];
     
-      
-      v2 = v[i] + (h/2.0) * a2;
-      r2 = r[i] + (h/2.0) * v2;
-      v[i] = v2;
-      r[i] = r2;
-      
-      printf("%f %f \n", v[i], r[i]);
-
-      campo_dipolo (b, r);
-      aceleracion (a, v, b);
-      
-      a3= a[i];
-      
-      v3 = v[i] + (h/2.0) * a3;
-      r3 = r[i] + (h/2.0) * v3;
     
-      v[i] = v3;
-      r[i] = r3;
-      printf("%f %f \n", v[i], r[i]);
-
-      campo_dipolo (b, r);
-      aceleracion (a, v, b);
-      
-      a4= a[i];
-      
-      float average_v = (1.0/6.0)*(a1+(2.0*a2)+(2.0*a3)+a4);
-      float average_r = (1.0/6.0)*(v1+(2.0*v2)+(2.0*v3)+v4);
-      
-      v[i] = v3 + h*average_v;
-      r[i] = r3 + h*average_r;
-      
-      printf("%f %f \n", v[i], r[i]);
-      
-    }
+    float a1x;
+    float a1y;
+    float a1z;
+    float a2x;
+    float a2y;
+    float a2z;
+    float a3x;
+    float a3y;
+    float a3z;
+    float a4x;
+    float a4y;
+    float a4z;
+    float v1x;
+    float v1y;
+    float v1z;
+    float v2x;
+    float v2y;
+    float v2z;
+    float v3x;
+    float v3y;
+    float v3z;
+    float v4x;
+    float v4y;
+    float v4z;
+    float r1x;
+    float r1y;
+    float r1z;
+    float r2x;
+    float r2y;
+    float r2z;
+    float r3x;
+    float r3y;
+    float r3z;
+    float r4x;
+    float r4y;
+    float r4z;
+    
+    
+    
+    
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
+    
+    a1x= a[0];
+    a1y= a[1];
+    a1z= a[2];
+    
+    
+    
+    v1x = v[0] + ((h/2.0) * a1x);
+    v1y = v[1] + ((h/2.0) * a1y);
+    v1z = v[2] + ((h/2.0) * a1z);      
+    r1x = r[0] + ((h/2.0) * v1x);
+    r1y = r[1] + ((h/2.0) * v1y);
+    r1z = r[2] + ((h/2.0) * v1z);
+    v[0] = v1x;
+    v[1] = v1x;
+    v[2] = v1x;
+    r[0] = r1x;
+    r[1] = r1y;
+    r[2] = r1z;
+    
+    
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
+    
+    a2x= a[0];
+    a2y= a[1];
+    a2z= a[2];
+    
+    v2x = v[0] + ((h/2.0) * a2x);
+    v2y = v[1] + ((h/2.0) * a2y);
+    v2z = v[2] + ((h/2.0) * a2z);      
+    r2x = r[0] + ((h/2.0) * v2x);
+    r2y = r[1] + ((h/2.0) * v2y);
+    r2z = r[2] + ((h/2.0) * v2z);
+    v[0] = v2x;
+    v[1] = v2y;
+    v[2] = v2z;
+    r[0] = r2x;
+    r[1] = r2y;
+    r[2] = r2z;
+    
+    
+    
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
+    
+    a3x= a[0];
+    a3y= a[1];
+    a3z= a[2];
+    
+    v3x = v[0] + ((h/2.0) * a3x);
+    v3y = v[1] + ((h/2.0) * a3y);
+    v3z = v[2] + ((h/2.0) * a3z);      
+    r3x = r[0] + ((h/2.0) * v3x);
+    r3y = r[1] + ((h/2.0) * v3y);
+    r3z = r[2] + ((h/2.0) * v3z);
+    v[0] = v3x;
+    v[1] = v3y;
+    v[2] = v3z;
+    r[0] = r3x;
+    r[1] = r3y;
+    r[2] = r3z;
+    
+    campo_dipolo (b, r);
+    aceleracion (a, v, b);
+    
+    a4x= a[0];
+    a4y= a[1];
+    a4z= a[2];
+    
+    
+    float average_vx = (1.0/6.0)*(a1x+(2.0*a2x)+(2.0*a3x)+a4x);
+    float average_rx = (1.0/6.0)*(v1x+(2.0*v2x)+(2.0*v3x)+v4x);
+    float average_vy = (1.0/6.0)*(a1y+(2.0*a2y)+(2.0*a3y)+a4y);
+    float average_ry = (1.0/6.0)*(v1y+(2.0*v2y)+(2.0*v3y)+v4y);
+    float average_vz = (1.0/6.0)*(a1z+(2.0*a2z)+(2.0*a3z)+a4z);
+    float average_rz = (1.0/6.0)*(v1z+(2.0*v2z)+(2.0*v3z)+v4z);
+    
+    v[0] = v3x + (h*average_vx);
+    r[0] = r3x + (h*average_rx);
+    v[1] = v3y + (h*average_vy);
+    r[1] = r3y + (h*average_ry);
+    v[2] = v3z + (h*average_vz);
+    r[2] = r3z + (h*average_rz);
+     
+    
     for(m=100;m<n_points;m+=100){
       if(m==j){
 	
@@ -169,15 +231,8 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 	for(i=0;i<n_points;i++){
 	  fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
 	}
-	
       }
     }
-    
-    
-    
-    
-    
- 
   }    
 
   return 0;
@@ -193,6 +248,8 @@ void campo_dipolo (float* b, float* r){
 
 }
 void aceleracion (float* a, float* v, float* b){
+
+
   a[0] = (b[2]*v[1]) - (v[2]*b[1]);
   a[1] = (b[2]*v[0]) - (v[2]*b[0]);
   a[2] = (b[1]*v[0]) - (v[1]*b[0]);
