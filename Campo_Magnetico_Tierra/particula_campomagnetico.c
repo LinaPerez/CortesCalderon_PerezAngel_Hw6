@@ -25,10 +25,10 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   float pitch;
   float energia_cinetica; 
   float c = 299759458; // velocidad de la luz m/s // 
-  float masa = 0.00000000000000000000000000167; //kg masa del proton en reposo // 
+  float masa = 1.67E-27; //kg masa del proton en reposo // 
   float Radio = 6378100; //metros del radio de la Tierra//
   float To = min_t;
-  float Bo = 0.00003; // Teslas del campo magnetico en el ecuador //
+  float Bo = 3E-5; // Teslas del campo magnetico en el ecuador //
 /*revisa el numero de argumentos que entra en al consola */ 
   if(argc!=3){
     printf("debe introducir los parámetros de energía cinética y el ángulo pitch");
@@ -163,7 +163,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 void campo_dipolo (float* b, float* r){
   float R = sqrt(pow(r[0], 2)+pow(r[1], 2) + pow(r[2], 2)); 
   float Radio = 6378100;
-  float Bo = 0.00003;
+  float Bo = 3E-5;
   b[0]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[0]*r[2])); 
   b[1]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[1]*r[2]));
   b[2]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (2*pow(r[2],2) - pow(r[0], 2) - pow(r[1], 2)));
