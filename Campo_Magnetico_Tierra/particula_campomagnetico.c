@@ -1,20 +1,25 @@
 #include<stdio.h>
 #include<math.h>
 #include<stdlib.h>
+#define h 1E-5
+#define min_t 0.0
+#define max_t 100.0
+#define pi 3.1415
+#define c 299759458
+#define masa 1.67E-27
+#define Radio 6378100
+#define Bo 3E-5
+#define carga 1.16E-19
 
-void campo_dipolo (float* b, float* r);
-void aceleracion (float* a, float* v, float* b);
+
+void campo_dipolo (float* b, float* r, float* a, float* v, float energia_cinetica);
 
 int main (int argc, char **argv){
   int i;
   int j;
   int m;
-  float pi = 3.1416;
-  
-  float h = 1E-6;
-  float min_t = 0.0;
-  float max_t = 100.0;
   float n_points = ((max_t - min_t) / h);
+
 /*
 Inicializar punteros que representan las listas para las funciones y, x, z, vx, vy, vz &  t
  */
@@ -26,13 +31,10 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   FILE* data;
   float pitch;
   float energia_cinetica1; 
-  float c = 299759458; // velocidad de la luz m/s // 
-  float masa = 1.67E-27; //kg masa del proton en reposo // 
-  float Radio = 6378100; //metros del radio de la Tierra//
   float To = min_t;
-  float Bo = 3E-5; // Teslas del campo magnetico en el ecuador //
-  float carga = 1.16E-19; // Coulombs 
+
 /*revisa el numero de argumentos que entra en al consola */ 
+
   if(argc!=3){
     printf("debe introducir los parámetros de energía cinética y el ángulo pitch");
     exit(1);
@@ -50,21 +52,14 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 /*Entradas por consola */
   energia_cinetica1 = atof(argv[1]); 
   pitch = atof(argv[2]);
- float  pitch_rad = (pitch*pi)/180.0;
- float energia_cinetica = energia_cinetica1*1.60217733E-13; // energia cinetica en joules 
+  float  pitch_rad = (pitch*pi)/180.0;
+  float energia_cinetica = (energia_cinetica1*1.60217733E-13)/1; // energia cinetica en joules 
 
-  /*valor inicial de la velocidad a partir de energia cinetica */
-  float v_o; 
-  float ff;
-  ff = energia_cinetica + (masa*pow(c,2));
-  v_o = c * (sqrt(((-pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))+1));
+ 
 
-  
-
-  float lambda = 1/(sqrt(1-((pow(v_o,2))/(pow(c,2)))));
-
-  float lxm = (carga/(lambda*masa)); //constantes ṕara el producto cruz
-  
+  float v_o;
+  v_o = c*(sqrt(1-(1/(pow(((energia_cinetica/(masa*pow(c,2)))-1),2)))));
+ 
   /*valores iniciales para r y v */
   for(i=0;i<n_points;i++){
     t[i]=0.0;
@@ -136,12 +131,11 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     float r4y;
     float r4z; 
     
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
-    
-    a1x= a[0]*lxm;
-    a1y= a[1]*lxm;
-    a1z= a[2]*lxm;
+    campo_dipolo (b, r, a, v, energia_cinetica);
+   
+    a1x= a[0];
+    a1y= a[1];
+    a1z= a[2];
     
     
     
@@ -159,12 +153,11 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     r[2] = r1z;
     
     
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
+   campo_dipolo (b, r, a, v, energia_cinetica);
     
-    a2x= a[0]*lxm;
-    a2y= a[1]*lxm;
-    a2z= a[2]*lxm;
+    a2x= a[0];
+    a2y= a[1];
+    a2z= a[2];
     
     v2x = v[0] + ((h/2.0) * a2x);
     v2y = v[1] + ((h/2.0) * a2y);
@@ -181,12 +174,12 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     
     
     
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
+    campo_dipolo (b, r, a, v, energia_cinetica);
+
     
-    a3x= a[0]*lxm;
-    a3y= a[1]*lxm;
-    a3z= a[2]*lxm;
+    a3x= a[0];
+    a3y= a[1];
+    a3z= a[2];
     
     v3x = v[0] + ((h/2.0) * a3x);
     v3y = v[1] + ((h/2.0) * a3y);
@@ -201,34 +194,28 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     r[1] = r3y;
     r[2] = r3z;
     
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
+    campo_dipolo (b, r, a, v, energia_cinetica);
     
-    a4x= a[0]*lxm;
-    a4y= a[1]*lxm;
-    a4z= a[2]*lxm;
+    a4x= a[0];
+    a4y= a[1];
+    a4z= a[2];
     
     
     float average_vx = (1.0/6.0)*(a1x+(2.0*a2x)+(2.0*a3x)+a4x);
-    float average_rx = (1.0/6.0)*(v1x+(2.0*v2x)+(2.0*v3x)+v4x);
     float average_vy = (1.0/6.0)*(a1y+(2.0*a2y)+(2.0*a3y)+a4y);
-    float average_ry = (1.0/6.0)*(v1y+(2.0*v2y)+(2.0*v3y)+v4y);
     float average_vz = (1.0/6.0)*(a1z+(2.0*a2z)+(2.0*a3z)+a4z);
-    float average_rz = (1.0/6.0)*(v1z+(2.0*v2z)+(2.0*v3z)+v4z);
     
     v[0] = v3x + (h*average_vx);
-    r[0] = r3x + (h*average_rx);
+    r[0] = r3x + (h*v[0]);
     v[1] = v3y + (h*average_vy);
-    r[1] = r3y + (h*average_ry);
+    r[1] = r3y + (h*v[1]);
     v[2] = v3z + (h*average_vz);
-    r[2] = r3z + (h*average_rz);
+    r[2] = r3z + (h*v[2]);
      
     
-    for(m=100;m<n_points;m+=100){
+    for(m=0;m<n_points;m+=10000){
       if(m==j){
     
-	
-
 	  fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
 
       }
@@ -238,20 +225,25 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   return 0;
 }
 
-void campo_dipolo (float* b, float* r){
+void campo_dipolo (float* b, float* r, float* a, float* v, float energia_cinetica){
   float R = sqrt(pow(r[0], 2)+pow(r[1], 2) + pow(r[2], 2)); 
-  float Radio = 6378100;
-  float Bo = 3E-5;
-  b[0]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[0]*r[2])); 
-  b[1]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (3*r[1]*r[2]));
-  b[2]= (-1*(Bo*pow(Radio, 3)/pow(R, 5)) * (2*pow(r[2],2) - pow(r[0], 2) - pow(r[1], 2)));
+ /*valor inicial de la velocidad a partir de energia cinetica */ 
+  float v_o;
+  float v_o1 = energia_cinetica/(masa*pow(c,2));
+  float v_o2 = (1.0/((v_o1)+1.0));
+  float v_o3 = 1-(pow(v_o2,2));
+  float v_o4 = c*(sqrt(v_o3));
 
-}
-void aceleracion (float* a, float* v, float* b){
-
-
-  a[0] = (b[2]*v[1]) - (v[2]*b[1]);
-  a[1] = (b[2]*v[0]) - (v[2]*b[0]);
-  a[2] = (b[1]*v[0]) - (v[1]*b[0]);
+  float lambda = 1/(sqrt(1-((pow(v_o4,2))/(pow(c,2)))));
+  
+  b[0]= (((-3*r[0]*r[2])*Bo*pow(Radio, 3))/pow(R, 5)); 
+  b[1]= (((-3*r[1]*r[2])*Bo*pow(Radio, 3))/pow(R, 5));
+  b[2]= ((((-2*pow(r[2],2)) + pow(r[0], 2) + pow(r[1], 2))*(Bo*pow(Radio, 3)))/pow(R, 5));
+  float v0 = (carga/(lambda*masa))*v[0];
+  float v1 = (carga/(lambda*masa))*v[1];
+  float v2 = (carga/(lambda*masa))*v[2];
+  a[0] = (b[2]*v1) - (v2*b[1]);
+  a[1] = (v2*b[0]) - (b[2]*v0);
+  a[2] = (b[1]*v0) - (v1*b[0]);
  
 }

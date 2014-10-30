@@ -34,7 +34,7 @@ tp = Axes3D(figura)
 tp.set_xlabel("$X$",fontsize=20)
 tp.set_ylabel("$Y$",fontsize=20)
 tp.set_zlabel("$Z$",fontsize=20)
-tp.set_title("$\mathrm{Trayectoria Particula en el Campo Magnético de la Tierra}$", fontsize=30)
+tp.set_title("$\mathrm{Trayectoria Particula en el Campo Magnetico de la Tierra}$", fontsize=30)
 tp.plot(x, y, z)
 plt.savefig(str(nombredatos)+'_3D_'+'.pdf')
 
