@@ -25,12 +25,13 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   float* t;
   FILE* data;
   float pitch;
-  float energia_cinetica; 
+  float energia_cinetica1; 
   float c = 299759458; // velocidad de la luz m/s // 
   float masa = 1.67E-27; //kg masa del proton en reposo // 
   float Radio = 6378100; //metros del radio de la Tierra//
   float To = min_t;
   float Bo = 3E-5; // Teslas del campo magnetico en el ecuador //
+  float carga = 1.16E-19; // Coulombs 
 /*revisa el numero de argumentos que entra en al consola */ 
   if(argc!=3){
     printf("debe introducir los parámetros de energía cinética y el ángulo pitch");
@@ -47,9 +48,10 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
  
 
 /*Entradas por consola */
-  energia_cinetica = atof(argv[1]); 
+  energia_cinetica1 = atof(argv[1]); 
   pitch = atof(argv[2]);
  float  pitch_rad = (pitch*pi)/180.0;
+ float energia_cinetica = energia_cinetica1*1.60217733E-13; // energia cinetica en joules 
 
   /*valor inicial de la velocidad a partir de energia cinetica */
   float v_o; 
@@ -60,6 +62,8 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   
 
   float lambda = 1/(sqrt(1-((pow(v_o,2))/(pow(c,2)))));
+
+  float lxm = (carga/(lambda*masa)); //constantes ṕara el producto cruz
   
   /*valores iniciales para r y v */
   for(i=0;i<n_points;i++){
@@ -84,12 +88,14 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     }
     
   }
-
+  char n[150];
+  sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica1,pitch);
+  data = fopen(n, "w");
   
   /* RungeKutta 4 orden */
   float t1 = min_t;
-  for(j=1; j<305;j++){
-    t1 = t[j-1]+ h;
+  for(j=1; j<n_points;j++){
+    t1 = j* h;
     
     
     
@@ -128,17 +134,14 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     float r3z;
     float r4x;
     float r4y;
-    float r4z;
-    
-    
-    
+    float r4z; 
     
     campo_dipolo (b, r);
     aceleracion (a, v, b);
     
-    a1x= a[0];
-    a1y= a[1];
-    a1z= a[2];
+    a1x= a[0]*lxm;
+    a1y= a[1]*lxm;
+    a1z= a[2]*lxm;
     
     
     
@@ -159,9 +162,9 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     campo_dipolo (b, r);
     aceleracion (a, v, b);
     
-    a2x= a[0];
-    a2y= a[1];
-    a2z= a[2];
+    a2x= a[0]*lxm;
+    a2y= a[1]*lxm;
+    a2z= a[2]*lxm;
     
     v2x = v[0] + ((h/2.0) * a2x);
     v2y = v[1] + ((h/2.0) * a2y);
@@ -181,9 +184,9 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     campo_dipolo (b, r);
     aceleracion (a, v, b);
     
-    a3x= a[0];
-    a3y= a[1];
-    a3z= a[2];
+    a3x= a[0]*lxm;
+    a3y= a[1]*lxm;
+    a3z= a[2]*lxm;
     
     v3x = v[0] + ((h/2.0) * a3x);
     v3y = v[1] + ((h/2.0) * a3y);
@@ -201,9 +204,9 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     campo_dipolo (b, r);
     aceleracion (a, v, b);
     
-    a4x= a[0];
-    a4y= a[1];
-    a4z= a[2];
+    a4x= a[0]*lxm;
+    a4y= a[1]*lxm;
+    a4z= a[2]*lxm;
     
     
     float average_vx = (1.0/6.0)*(a1x+(2.0*a2x)+(2.0*a3x)+a4x);
@@ -223,14 +226,11 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     
     for(m=100;m<n_points;m+=100){
       if(m==j){
+    
 	
-	char n[150];
-	sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica,pitch);
-	data = fopen(n, "w");
-	
-	for(i=0;i<n_points;i++){
+
 	  fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
-	}
+
       }
     }
   }    
