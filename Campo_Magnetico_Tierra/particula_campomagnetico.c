@@ -8,9 +8,10 @@ void aceleracion (float* a, float* v, float* b);
 int main (int argc, char **argv){
   int i;
   int j;
+  int m;
   float pi = 3.1416;
   
-  float h = 0.000001;
+  float h = 1E-6;
   float min_t = 0.0;
   float max_t = 100.0;
   float n_points = ((max_t - min_t) / h);
@@ -21,6 +22,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   float* a;
   float* v; 
   float* r;
+  float* t;
   FILE* data;
   float pitch;
   float energia_cinetica; 
@@ -41,6 +43,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   b = malloc(3*sizeof(float));
   a = malloc(3*sizeof(float));
   v = malloc(3*sizeof(float));
+  t = malloc(n_points*sizeof(float));
  
 
 /*Entradas por consola */
@@ -52,10 +55,14 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   float v_o; 
   float ff;
   ff = energia_cinetica + (masa*pow(c,2));
-  v_o = c * (sqrt(((pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))-1));
+  v_o = c * (sqrt(((-pow(masa, 2)*pow(c, 4))/(pow(ff, 2)))+1));
+
   float lambda = 1/(sqrt(1-((pow(v_o,2))/(pow(c,2)))));
   
   /*valores iniciales para r y v */
+  for(i=0;i<n_points;i++){
+    t[i]=0.0;
+  }
   for (i=0;i<3;i++){
     
     if(i==0){
@@ -75,88 +82,104 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     }
     
   }
+
   
   /* RungeKutta 4 orden */
-
- for(j=0; j<n_points;j++){
- for(i=0; i<3; i++){
-
-   /* falta el if para el print y hacer un arreglo para el tiempo */
-    
-    float a1;
-    float a2;
-    float a3;
-    float a4;
-    float v1;
-    float v2;
-    float v3;
-    float v4;
-    float r1;
-    float r2;
-    float r3;
-    float r4;
+  float t1 = min_t;
+  for(j=0; j<4;j++){
+    t1 = t[j]+ h;
+    for(i=0; i<3; i++){
+      
+      
+      float a1;
+      float a2;
+      float a3;
+      float a4;
+      float v1;
+      float v2;
+      float v3;
+      float v4;
+      float r1;
+      float r2;
+      float r3;
+      float r4;
+      
+      
+      
    
-   
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
+      campo_dipolo (b, r);
+      aceleracion (a, v, b);
+      
+      a1= a[i];
+      
+      v1 = v[i] + (h/2.0) * a1;
+      r1 = r[i] + (h/2.0) * v1;
+      v[i] = v1;
+      r[i] = r1;
+
+      printf("%f %f \n", v[i], r[i]);
+      
     
-    a1= a[i];
-
-    v1 = v[i] + (h/2.0) * a1;
-    r1 = r[i] + (h/2.0) * v1;
-    v[i] = v1;
-    r[i] = r1;
-
-
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
+      campo_dipolo (b, r);
+      aceleracion (a, v, b);
+      
+      a2= a[i];
     
-    a2= a[i];
+      
+      v2 = v[i] + (h/2.0) * a2;
+      r2 = r[i] + (h/2.0) * v2;
+      v[i] = v2;
+      r[i] = r2;
+      
+      printf("%f %f \n", v[i], r[i]);
+
+      campo_dipolo (b, r);
+      aceleracion (a, v, b);
+      
+      a3= a[i];
+      
+      v3 = v[i] + (h/2.0) * a3;
+      r3 = r[i] + (h/2.0) * v3;
     
+      v[i] = v3;
+      r[i] = r3;
+      printf("%f %f \n", v[i], r[i]);
 
-    v2 = v[i] + (h/2.0) * a2;
-    r2 = r[i] + (h/2.0) * v2;
-    v[i] = v2;
-    r[i] = r2;
+      campo_dipolo (b, r);
+      aceleracion (a, v, b);
+      
+      a4= a[i];
+      
+      float average_v = (1.0/6.0)*(a1+(2.0*a2)+(2.0*a3)+a4);
+      float average_r = (1.0/6.0)*(v1+(2.0*v2)+(2.0*v3)+v4);
+      
+      v[i] = v3 + h*average_v;
+      r[i] = r3 + h*average_r;
+      
+      printf("%f %f \n", v[i], r[i]);
+      
+    }
+    for(m=100;m<n_points;m+=100){
+      if(m==j){
+	
+	char n[150];
+	sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica,pitch);
+	data = fopen(n, "w");
+	
+	for(i=0;i<n_points;i++){
+	  fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
+	}
+	
+      }
+    }
+    
+    
+    
+    
+    
+ 
+  }    
 
-
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
-
-    a3= a[i];
-
-    v3 = v[i] + (h/2.0) * a3;
-    r3 = r[i] + (h/2.0) * v3;
-
-    v[i] = v3;
-    r[i] = r3;
-
-    campo_dipolo (b, r);
-    aceleracion (a, v, b);
-
-    a4= a[i];
-   
-    float average_v = (1.0/6.0)*(a1+(2.0*a2)+(2.0*a3)+a4);
-    float average_r = (1.0/6.0)*(v1+(2.0*v2)+(2.0*v3)+v4);
-
-    v[i] = v3 + h*average_v;
-    r[i] = r3 + h*average_r;
-  }
- }
-
-
-
-
-  /* guardar archivo
-}
-  char n[150];
-  sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica,pitch);
-  data = fopen(n, "w");
-
-  for(i=0;i<n_points;i++){
-    fprintf(data, "%f %f %f %f \n", t[i], x[i], y[i], z[i]);
-}
- */
   return 0;
 }
 
