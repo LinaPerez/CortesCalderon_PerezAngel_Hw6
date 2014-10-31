@@ -4,7 +4,7 @@
 
 void campo_dipolo (double* r, double* a, double* v, double energia_cinetica);
 
-#define dh 1E-4
+#define dh 1E-5
 #define pi 3.141592
 #define c 299759458
 #define masa 1.67E-27
@@ -81,7 +81,7 @@ int main (int argc, char **argv){
  r_o[2]=0.0;
 
  char n[150];
- sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica1,pitch);
+ sprintf(n,"trayectoria_%f_%f.dat",energia_cinetica1,pitch);
  data = fopen(n, "w");
 
 
@@ -147,7 +147,7 @@ for(j=1; j<n_points;j++){
     r_o[1] = r4[1];
     r_o[2] = r4[2];
     
-    for(m=0;m<n_points;m+=1000){
+    for(m=0;m<n_points;m+=10000){
       if(m==j){
     
 	fprintf(data, "%f %f %f %f \n", t1[j], r_o[0], r_o[1], r_o[2]);
@@ -176,13 +176,13 @@ void campo_dipolo (double* r, double* a, double* v, double energia_cinetica){
   
   double b0, b1, b2;
  
-  b0 = -(Bo*pow(Radio,3)/pow(R,5))*(3*x*y); 
+  b0 = (Bo*pow(Radio,3)/pow(R,5))*(3*x*y); 
   b1 = -(Bo*pow(Radio,3)/pow(R,5))*(3*y*z);
-  b2 = -(Bo*pow(Radio,3)/pow(R,5))*(2*pow(z,2)-pow(x,2)-pow(y,2));
+  b2 = (Bo*pow(Radio,3)/pow(R,5))*(2*pow(z,2)-pow(x,2)-pow(y,2));
   
-  double v0 = (carga/(lambda*masa))*v[0];
-  double v1 = (carga/(lambda*masa))*v[1];
-  double v2 = (carga/(lambda*masa))*v[2];
+  double v0 = -(carga/(lambda*masa))*v[0];
+  double v1 = -(carga/(lambda*masa))*v[1];
+  double v2 = -(carga/(lambda*masa))*v[2];
   a[0] = (b2*v1) - (v2*b1);
   a[1] = (v2*b0) - (b2*v0);
   a[2] = (b1*v0) - (v1*b0);
