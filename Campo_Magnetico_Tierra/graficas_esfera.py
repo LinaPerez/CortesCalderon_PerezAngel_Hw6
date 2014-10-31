@@ -29,7 +29,7 @@ plt.title('Trayectoria X-Y')
 plt.savefig(str(nombredatos)+'.pdf')
 
 #Gracia 3D de la trayectoria en el plano x, y, z
-figura = figure()
+figura = plt.figure()
 tp = Axes3D(figura)
 tp.set_xlabel("$X$",fontsize=20)
 tp.set_ylabel("$Y$",fontsize=20)

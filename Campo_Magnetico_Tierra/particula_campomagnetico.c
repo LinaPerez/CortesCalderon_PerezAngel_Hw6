@@ -53,13 +53,15 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   energia_cinetica1 = atof(argv[1]); 
   pitch = atof(argv[2]);
   float  pitch_rad = (pitch*pi)/180.0;
-  float energia_cinetica = (energia_cinetica1*1.60217733E-13)/1; // energia cinetica en joules 
+  float energia_cinetica = (energia_cinetica1*1.60217733E-13); // energia cinetica en joules 
 
  
+  float v_o1 = energia_cinetica/(masa*pow(c,2));
+  float v_o2 = (1.0/((v_o1)+1.0));
+  float v_o3 = 1-(pow(v_o2,2));
+  float v_o4 = c*(sqrt(v_o3));
+  float v_o = v_o4;
 
-  float v_o;
-  v_o = c*(sqrt(1-(1/(pow(((energia_cinetica/(masa*pow(c,2)))-1),2)))));
- 
   /*valores iniciales para r y v */
   for(i=0;i<n_points;i++){
     t[i]=0.0;
@@ -87,13 +89,6 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica1,pitch);
   data = fopen(n, "w");
   
-  /* RungeKutta 4 orden */
-  float t1 = min_t;
-  for(j=1; j<n_points;j++){
-    t1 = j* h;
-    
-    
-    
     float a1x;
     float a1y;
     float a1z;
@@ -129,7 +124,14 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     float r3z;
     float r4x;
     float r4y;
-    float r4z; 
+    float r4z;
+  /* RungeKutta 4 orden */
+  float t1 = min_t;
+  for(j=1; j<n_points;j++){
+    t1 = j* h;
+    
+    
+     
     
     campo_dipolo (b, r, a, v, energia_cinetica);
    
@@ -213,7 +215,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     r[2] = r3z + (h*v[2]);
      
     
-    for(m=0;m<n_points;m+=10000){
+    for(m=0;m<n_points;m+=1000){
       if(m==j){
     
 	  fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
@@ -228,13 +230,12 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 void campo_dipolo (float* b, float* r, float* a, float* v, float energia_cinetica){
   float R = sqrt(pow(r[0], 2)+pow(r[1], 2) + pow(r[2], 2)); 
  /*valor inicial de la velocidad a partir de energia cinetica */ 
-  float v_o;
   float v_o1 = energia_cinetica/(masa*pow(c,2));
   float v_o2 = (1.0/((v_o1)+1.0));
   float v_o3 = 1-(pow(v_o2,2));
   float v_o4 = c*(sqrt(v_o3));
 
-  float lambda = 1/(sqrt(1-((pow(v_o4,2))/(pow(c,2)))));
+  float lambda = 1/(sqrt(1-(pow((v_o4/c), 2))));
   
   b[0]= (((-3*r[0]*r[2])*Bo*pow(Radio, 3))/pow(R, 5)); 
   b[1]= (((-3*r[1]*r[2])*Bo*pow(Radio, 3))/pow(R, 5));
