@@ -1,0 +1,90 @@
+#include<stdio.h>
+#include<math.h>
+#include<stdlib.h>
+
+void campo_dipolo (double* r, double* a, double* v, double energia_cinetica);
+
+#define dh 1E-5
+#define pi 3.141592
+#define c 299759458
+#define masa 1.67E-27
+#define Radio 6378100
+#define Bo 3E-5
+#define carga 1.6E-19
+int main (int argc, char **argv){
+
+int i;
+  int j;
+  int m;
+  double  min_t = 0.0;
+  double  max_t = 100.0;
+  double n_points = ((max_t - min_t) / dh);
+
+  double* a1;
+  double* a2;
+  double* a3;
+  double* a4;
+  double* v1;
+  double* v2;
+  double* v3;
+  double* v4;
+  double*v_o; 
+  double* r1;
+  double* r2;
+  double* r3;
+  double* r4;
+  double* t;
+  FILE* data;
+  double pitch;
+  double energia_cinetica1; 
+  double To = min_t;
+
+ if(argc!=3){
+    printf("debe introducir los parámetros de energía cinética y el ángulo pitch");
+    exit(1);
+  }
+ r1 = malloc(3*sizeof(double));
+ r2 = malloc(3*sizeof(double));
+ r3 = malloc(3*sizeof(double));
+ r4 = malloc(3*sizeof(double));
+ a1 = malloc(3*sizeof(double));
+ a2 = malloc(3*sizeof(double));
+ a3 = malloc(3*sizeof(double));
+ a4 = malloc(3*sizeof(double));
+ v1 = malloc(3*sizeof(double));
+ v2 = malloc(3*sizeof(double));
+ v3 = malloc(3*sizeof(double));
+ v4 = malloc(3*sizeof(double));
+ t = malloc(n_points*sizeof(double));
+ 
+}
+
+
+void campo_dipolo (double* r, double* a, double* v, double energia_cinetica){
+  double x = r[0];
+  double y = r[1];
+  double z = r[2]; 
+ double R = sqrt(pow(x, 2)+pow(y, 2) + pow(z, 2)); 
+
+ /*valor inicial de la velocidad a partir de energia cinetica */ 
+  double v_o1 = energia_cinetica/(masa*pow(c,2));
+  double v_o2 = (1.0/((v_o1)+1.0));
+  double v_o3 = 1-(pow(v_o2,2));
+  double v_o4 = c*(sqrt(v_o3));
+
+  double lambda = 1/(sqrt(1-(pow((v_o4/c), 2))));
+  
+  double b0, b1, b2;
+ 
+  b0 = -(Bo*pow(Radio,3)/pow(R,5))*(3*x*y); 
+  b1 = -(Bo*pow(Radio,3)/pow(R,5))*(3*y*z);
+  b2 = -(Bo*pow(Radio,3)/pow(R,5))*(2*pow(z,2)-pow(x,2)-pow(y,2));
+  
+  double v0 = (carga/(lambda*masa))*v[0];
+  double v1 = (carga/(lambda*masa))*v[1];
+  double v2 = (carga/(lambda*masa))*v[2];
+  a[0] = (b2*v1) - (v2*b1);
+  a[1] = (v2*b0) - (b2*v0);
+  a[2] = (b1*v0) - (v1*b0);
+  
+}
