@@ -25,7 +25,7 @@ nombredatos="".join(l)
 plt.plot(x,y)
 plt.xlabel('X')
 plt.ylabel('Y')
-plt.title('Trayectoria X-Y')
+plt.title('Trayectoria 2D')
 plt.savefig(str(nombredatos)+'.pdf')
 
 #Gracia 3D de la trayectoria en el plano x, y, z
@@ -34,7 +34,7 @@ tp = Axes3D(figura)
 tp.set_xlabel("$X$",fontsize=20)
 tp.set_ylabel("$Y$",fontsize=20)
 tp.set_zlabel("$Z$",fontsize=20)
-tp.set_title("$\mathrm{Trayectoria Particula en el Campo Magnetico de la Tierra}$", fontsize=30)
+tp.set_title("$\mathrm{Trayectoria Particula en 3D}$", fontsize=30)
 tp.plot(x, y, z)
 plt.savefig(str(nombredatos)+'_3D_'+'.pdf')
 

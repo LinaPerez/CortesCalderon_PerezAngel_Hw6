@@ -62,28 +62,28 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
   double v_o = v_o4;
 
   /*valores iniciales para r y v */
-  for(i=0;i<n_points;i++){
+  //  for(i=0;i<n_points;i++){
     t[i]=0.0;
-  }
-  for (i=0;i<3;i++){
+    //  }
+    // for (i=0;i<3;i++){
     
-    if(i==0){
-      r[i] = 2*Radio;
-      v[i] = 0.0;
+    //if(i==0){
+      r[0] = 2*Radio;
+      v[0] = 0.0;
       
-    }
-    if(i==1){
-      r[i] = 0.0;
-      v[i] = v_o*sin(pitch_rad);
+      // }
+      // if(i==1){
+      r[1] = 0.0;
+      v[1] = v_o*sin(pitch_rad);
       
-    }
-    if(i==2){
-      r[i] = 0.0;
-      v[i] = v_o*cos(pitch_rad);
+      // }
+      //if(i==2){
+      r[2] = 0.0;
+      v[2] = v_o*cos(pitch_rad);
       
-    }
+      //
     
-  }
+      //}
   char n[150];
   sprintf(n,"trayectoria_%.0f_%.0f.dat",energia_cinetica1,pitch);
   data = fopen(n, "w");
