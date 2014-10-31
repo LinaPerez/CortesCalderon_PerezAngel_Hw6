@@ -2,12 +2,12 @@
 #include<math.h>
 #include<stdlib.h>
 #define h 1E-5
-#define pi 3.1415
+#define pi 3.141592
 #define c 299759458
 #define masa 1.67E-27
 #define Radio 6378100
 #define Bo 3E-5
-#define carga 1.16E-19
+#define carga 1.6E-19
 
 
 void campo_dipolo (double* r, double* a, double* v, double energia_cinetica);
@@ -23,11 +23,8 @@ int main (int argc, char **argv){
 /*
 Inicializar punteros que representan las listas para las funciones y, x, z, vx, vy, vz &  t
  */
-  double* b;
+
   double* a;
-  double* a1;
-  double* a2;
-  double* a3;
   double* v; 
   double* r;
   double* t;
@@ -46,11 +43,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 
 /*Dimensiones de los punteros */
   r = malloc(3*sizeof(double));
-  b = malloc(3*sizeof(double));
   a = malloc(3*sizeof(double));
-  a1 = malloc(3*sizeof(double)); 
-  a2 = malloc(3*sizeof(double)); 
-  a3 = malloc(3*sizeof(double));
   v = malloc(3*sizeof(double));
   t = malloc(n_points*sizeof(double));
  
@@ -101,7 +94,7 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
 
   /* RungeKutta 4 orden */
   double t1 = To;
-  for(j=1; j<4;j++){
+  for(j=1; j<n_points;j++){
     t1 = j* h;
   
     campo_dipolo (r, a, v, energia_cinetica);
@@ -115,40 +108,40 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     r1x = r[0] + ((h/2.0) * v1x);
     r1y = r[1] + ((h/2.0) * v1y);
     r1z = r[2] + ((h/2.0) * v1z);
-    /*  v[0] = v1x;
+    v[0] = v1x;
     v[1] = v1x;
     v[2] = v1x;
     r[0] = r1x;
     r[1] = r1y;
-    r[2] = r1z;*/
+    r[2] = r1z;
     
    
-   campo_dipolo (r, a1, v, energia_cinetica);
+   campo_dipolo (r, a, v, energia_cinetica);
     
-    a2x= a1[0];
-    a2y= a1[1];
-    a2z= a1[2];
-    v2x = v[0] + ((h/2.0) * a2x);
-    v2y = v[1] + ((h/2.0) * a2y);
-    v2z = v[2] + ((h/2.0) * a2z);      
+    a2x= a[0];
+    a2y= a[1];
+    a2z= a[2];
+    v2x =v[0] + ((h/2.0) * a2x);
+    v2y =v[1] + ((h/2.0) * a2y);
+    v2z =v[2] + ((h/2.0) * a2z);      
     r2x = r[0] + ((h/2.0) * v2x);
     r2y = r[1] + ((h/2.0) * v2y);
     r2z = r[2] + ((h/2.0) * v2z);
-    /* v[0] = v2x;
+    v[0] = v2x;
     v[1] = v2y;
     v[2] = v2z;
     r[0] = r2x;
     r[1] = r2y;
-    r[2] = r2z;*/
+    r[2] = r2z;
     
   
     
-    campo_dipolo (r, a2, v, energia_cinetica);
+    campo_dipolo (r, a, v, energia_cinetica);
 
     
-    a3x= a2[0];
-    a3y= a2[1];
-    a3z= a2[2];
+    a3x= a[0];
+    a3y= a[1];
+    a3z= a[2];
     v3x = v[0] + ((h/2.0) * a3x);
     v3y = v[1] + ((h/2.0) * a3y);
     v3z = v[2] + ((h/2.0) * a3z);      
@@ -162,11 +155,11 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     r[1] = r3y;
     r[2] = r3z;
     
-    campo_dipolo (r, a3, v, energia_cinetica);
+    campo_dipolo (r, a, v, energia_cinetica);
     
-    a4x= a3[0];
-    a4y= a3[1];
-    a4z= a3[2];
+    a4x= a[0];
+    a4y= a[1];
+    a4z= a[2];
     
     
     float average_vx = (1.0/6.0)*(a1x+(2.0*a2x)+(2.0*a3x)+a4x);
@@ -183,22 +176,24 @@ Inicializar punteros que representan las listas para las funciones y, x, z, vx, 
     v[2] = v3z + (h*average_vz);
     r[2] = r3z + (h*average_rz);
      
-  
-    /*    for(m=0;m<n_points;m+=1000){
+    
+    for(m=0;m<n_points;m+=1000){
       if(m==j){
     
-	  fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
-
+	fprintf(data, "%f %f %f %f \n", t1, r[0], r[1], r[2]);
+	
       }
-      }*/ 
+    }
   }    
-
+  
   return 0;
 }
 
 void campo_dipolo (double* r, double* a, double* v, double energia_cinetica){
- 
- double R = sqrt(pow(r[0], 2)+pow(r[1], 2) + pow(r[2], 2)); 
+  double x = r[0];
+  double y = r[1];
+  double z = r[2]; 
+ double R = sqrt(pow(x, 2)+pow(y, 2) + pow(z, 2)); 
 
  /*valor inicial de la velocidad a partir de energia cinetica */ 
   double v_o1 = energia_cinetica/(masa*pow(c,2));
@@ -209,15 +204,16 @@ void campo_dipolo (double* r, double* a, double* v, double energia_cinetica){
   double lambda = 1/(sqrt(1-(pow((v_o4/c), 2))));
   
   double b0, b1, b2;
-
-  b0= (((-3*r[0]*r[2])*Bo*pow(Radio, 3))/pow(R, 5)); 
-  b1= (((-3*r[1]*r[2])*Bo*pow(Radio, 3))/pow(R, 5));
-  b2= ((((-2*pow(r[2],2)) + pow(r[0], 2) + pow(r[1], 2))*(Bo*pow(Radio, 3)))/pow(R, 5));
+ 
+  b0 = -(Bo*pow(Radio,3)/pow(R,5))*(3*x*y); 
+  b1 = -(Bo*pow(Radio,3)/pow(R,5))*(3*y*z);
+  b2 = -(Bo*pow(Radio,3)/pow(R,5))*(2*pow(z,2)-pow(x,2)-pow(y,2));
+  
   double v0 = (carga/(lambda*masa))*v[0];
   double v1 = (carga/(lambda*masa))*v[1];
   double v2 = (carga/(lambda*masa))*v[2];
   a[0] = (b2*v1) - (v2*b1);
   a[1] = (v2*b0) - (b2*v0);
   a[2] = (b1*v0) - (v1*b0);
- 
+  
 }
