@@ -67,91 +67,90 @@ poblaciones_1_20.dat: runge_kutta.x
 
 poblaciones_30_20.pdf: poblaciones_30_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_30_20.dat
-	open poblaciones_30_20.pdf
+
 poblaciones_29_20.pdf: poblaciones_29_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_29_20.dat
-	open poblaciones_29_20.pdf
+
 poblaciones_28_20.pdf: poblaciones_28_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_28_20.dat
-	open poblaciones_28_20.pdf
+
 poblaciones_27_20.pdf: poblaciones_27_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_27_20.dat
-	open poblaciones_27_20.pdf
+
 poblaciones_26_20.pdf: poblaciones_26_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_26_20.dat
-	open poblaciones_26_20.pdf
+
 poblaciones_25_20.pdf: poblaciones_25_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_25_20.dat
-	open poblaciones_25_20.pdf
+
 poblaciones_24_20.pdf: poblaciones_24_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_24_20.dat
-	open poblaciones_24_20.pdf
+
 poblaciones_23_20.pdf: poblaciones_23_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_23_20.dat
-	open poblaciones_23_20.pdf
+
 poblaciones_22_20.pdf: poblaciones_22_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_22_20.dat
-	open poblaciones_22_20.pdf
+
 poblaciones_21_20.pdf: poblaciones_21_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_21_20.dat
-	open poblaciones_21_20.pdf
+
 poblaciones_20_20.pdf: poblaciones_20_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_20_20.dat
-	open poblaciones_20_20.pdf
+
 poblaciones_19_20.pdf: poblaciones_19_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_19_20.dat
-	open poblaciones_19_20.pdf
+
 poblaciones_18_20.pdf: poblaciones_18_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_18_20.dat
-	open poblaciones_18_20.pdf
+
 poblaciones_17_20.pdf: poblaciones_17_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_17_20.dat
-	open poblaciones_17_20.pdf
+
 poblaciones_16_20.pdf: poblaciones_16_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_16_20.dat
-	open poblaciones_16_20.pdf
+
 poblaciones_15_20.pdf: poblaciones_15_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_15_20.dat
-	open poblaciones_15_20.pdf
+
 poblaciones_14_20.pdf: poblaciones_14_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_14_20.dat
-	open poblaciones_14_20.pdf
+
 poblaciones_13_20.pdf: poblaciones_13_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_13_20.dat
-	open poblaciones_13_20.pdf
+
 poblaciones_12_20.pdf: poblaciones_12_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_12_20.dat
-	open poblaciones_12_20.pdf
+
 poblaciones_11_20.pdf: poblaciones_11_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_11_20.dat
-	open poblaciones_11_20.pdf
+
 poblaciones_10_20.pdf: poblaciones_10_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_10_20.dat
-	open poblaciones_10_20.pdf
+
 poblaciones_9_20.pdf: poblaciones_9_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_9_20.dat
-	open poblaciones_9_20.pdf
+
 poblaciones_8_20.pdf: poblaciones_8_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_8_20.dat
-	open poblaciones_8_20.pdf
+
 poblaciones_7_20.pdf: poblaciones_7_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_7_20.dat
-	open poblaciones_7_20.pdf
+
 poblaciones_6_20.pdf: poblaciones_6_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_6_20.dat
-	open poblaciones_6_20.pdf
+
 poblaciones_5_20.pdf: poblaciones_5_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_5_20.dat
-	open poblaciones_5_20.pdf
+
 poblaciones_4_20.pdf: poblaciones_4_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_4_20.dat
-	open poblaciones_4_20.pdf
+
 poblaciones_3_20.pdf: poblaciones_3_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_3_20.dat
-	open poblaciones_3_20.pdf
+
 poblaciones_2_20.pdf: poblaciones_2_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_2_20.dat
-	open poblaciones_2_20.pdf
+
 poblaciones_1_20.pdf: poblaciones_1_20.dat plot_poblaciones.py
 	python plot_poblaciones.py poblaciones_1_20.dat
-	open poblaciones_1_20.pdf
